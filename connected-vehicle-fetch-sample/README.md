@@ -4,7 +4,7 @@
 
 Minimal example using node on how to get started with Volvo Cars’ Connected Vehicle API.
 
-Read the full API documentation [here](https://developer.volvocars.com/volvo-api/connected-vehicle/).
+Read the full API documentation [here](https://developer.volvocars.com/apis/connected-vehicle/details/).
 
 ## Prerequisites
 

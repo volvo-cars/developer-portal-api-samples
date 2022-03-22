@@ -30,10 +30,9 @@ const main = async () => {
 };
 
 /**
- * Uses the vehicle list endpoint to fetch all cars connected to the
- * access token.
+ * Uses the vehicle list endpoint to fetch all cars connected to the Volvo ID.
  *
- * Full endpoint docs: https://developer.volvocars.com/volvo-api/connected-vehicle/#get-vehicle-list
+ * Full endpoint docs: https://developer.volvocars.com/apis/connected-vehicle/endpoints/vehicle/#list-vehicles
  */
 const fetchVehicles = async () => {
   const response = await fetch(`${baseUrl}/vehicles`, {
@@ -57,7 +56,7 @@ const fetchVehicles = async () => {
 /**
  * Uses the vehicle details endpoint to fetch details regarding the car.
  *
- * Full endpoint docs: https://developer.volvocars.com/volvo-api/connected-vehicle/#get-vehicle-details
+ * Full endpoint docs: https://developer.volvocars.com/apis/connected-vehicle/endpoints/vehicle/#get-vehicle-details
  */
 const fetchVehicleDetails = async (vinNumber) => {
   const response = await fetch(`${baseUrl}/vehicles/${vinNumber}`, {
