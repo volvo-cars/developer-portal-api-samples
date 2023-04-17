@@ -26,7 +26,7 @@ const main = async () => {
     );
   });
 
-  Promise.all(promises);
+  await Promise.all(promises);
 };
 
 /**
@@ -85,6 +85,8 @@ const fetchVehicleDetails = async (vinNumber) => {
 
 class RequestError extends Error {
   constructor(data) {
-    super(`Request failed: ${JSON.stringify(data, null, 2)}`);
+    super(
+      `Request failed with status ${data.status} and message "${data.error.message}"`
+    );
   }
 }
