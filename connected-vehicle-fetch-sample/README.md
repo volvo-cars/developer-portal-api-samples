@@ -8,8 +8,8 @@ Read the full API documentation on the [Volvo Cars Developer Portal](https://dev
 
 ## Prerequisites
 
-- node 16 or above.
-- npm 8 or above.
+- node 18 or above.
+- npm 9 or above.
 
 ## Running Locally
 
@@ -23,7 +23,7 @@ npm install
 
 ### 2. Setup environment variables
 
-Create an .env file with the following environment variables:
+Create an `.env` file with the following environment variables:
 
 - `VCC_API_KEY` - This is your application key. To acquire your application key, visit [your account page](https://developer.volvocars.com/account/) and create an application.
 
