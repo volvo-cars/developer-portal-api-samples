@@ -4,12 +4,12 @@
 
 Minimal example using node on how to get started with Volvo Cars’ Connected Vehicle API.
 
-Read the full API documentation [here](https://developer.volvocars.com/apis/connected-vehicle/details/).
+Read the full API documentation on the [Volvo Cars Developer Portal](https://developer.volvocars.com/apis/connected-vehicle/details/).
 
 ## Prerequisites
 
-- node 14 or above.
-- npm 7 or above.
+- node 18 or above.
+- npm 9 or above.
 
 ## Running Locally
 
@@ -21,14 +21,14 @@ Install dependencies
 npm install
 ```
 
-### 2. Setup environment variables 
+### 2. Setup environment variables
 
-Create an .env file in the /node/ folder with your own environment variables.
+Create an `.env` file with the following environment variables:
 
-```zsh
-VCC_API_KEY=<your-vcc-api-key-here>
-ACCESS_TOKEN=<your-access-token-here>
-```
+- `VCC_API_KEY` - This is your application key. To acquire your application key, visit [your account page](https://developer.volvocars.com/account/) and create an application.
+
+- `ACCESS_TOKEN` - This is an OAuth2 bearer token. To generate a Connected Vehicle API access token, visit the [Test access tokens page](https://developer.volvocars.com/apis/docs/test-access-tokens/#demo-car)
+
 NOTE: The access token is short lived and needs to be refreshed every 60 min.
 
 ### 3. Run code
