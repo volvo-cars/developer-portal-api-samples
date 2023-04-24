@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OAuth2 code flow sample</title>
+    <link rel="stylesheet" href="./css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://www.volvocars.com/static/shared/pkg/css/v0/font-face.05a7ed4c.css"
+      data-volvo-css-name="font-face.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://www.volvocars.com/static/shared/pkg/css/v0/styles.6e44ad25.css"
+      data-volvo-css-name="styles.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://www.volvocars.com/static/shared/pkg/css/v0/styles_hover.560b7992.css"
+      data-volvo-css-name="styles_hover.css"
+      media="(hover: hover)"
+    />
+    <link
+      rel="stylesheet"
+      href="https://www.volvocars.com/static/shared/pkg/css/v0/tokens.cef80cff.css"
+      data-volvo-css-name="tokens.css"
+    />
+  </head>
+
+  <body class="volvo_v0">
+    <main class="stack-24 pt-24 px-24">
+      <h1>0Auth2 Code flow sample project</h1>
+      <p>
+        Congratulations on acquiring your access token! This token will enable
+        you to authorize your requests towards our APIs. You can find all of our
+        APIs on the Volvo Cars Developer Portal's
+        <a href="https://developer.volvocars.com/apis/" target="_blank"
+          >APIs page</a
+        >.
+      </p>
+      <p>
+        To begin making your first API request, we suggest visiting the
+        <a
+          target="_blank"
+          href="https://developer.volvocars.com/apis/docs/getting-started/#your-first-api-request"
+          >Getting started page</a
+        >
+        on the Developer Portal. This page provides detailed documentation to
+        guide you through the process step by step.
+      </p>
+      <h2 class="heading-3 font-medium">Your access token</h2>
+      <pre id="access-token"></pre>
+      <button id="refresh">Refresh access token</button>
+    </main>
+    <script src="./js/cookies.js"></script>
+    <script src="./js/main.js"></script>
+  </body>
+</html>

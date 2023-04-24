@@ -1,0 +1,25 @@
+main {
+  max-width: 700px;
+  margin: auto;
+}
+
+button {
+  padding: calc(var(--v-space-24) / 2) var(--v-space-24);
+  border: 1px solid var(--v-color-foreground-primary);
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+button:hover {
+  background-color: var(--v-color-foreground-primary);
+  color: var(--v-color-background-primary);
+}
+
+pre {
+  max-width: 100%;
+  overflow-wrap: break-word;
+  padding: var(--v-space-24);
+  background-color: var(--v-color-background-secondary);
+}
