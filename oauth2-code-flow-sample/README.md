@@ -2,7 +2,7 @@
 
 ## About
 
-This is a sample app built using Node.js, the Express framework and vanilla JavaScript. It showcases how to authorize with the Volvo ID Identity system using OAuth2 and how to acquire an access token.
+This is a sample app built using Node.js, Express and vanilla JavaScript. It showcases how to authorize with the Volvo ID Identity system using OAuth2 and how to acquire an access token.
 
 Read the full step by step documentation on the [Volvo Cars Developer Portal Authorization page](https://developer.volvocars.com/apis/docs/authorisation/).
 
@@ -43,4 +43,4 @@ Your application will now be available at `http://localhost:3000`
 
 ## Disclaimer
 
-This project is not intended for use in production environments and is only meant for educational and local testing purposes.
+Please note that this project is solely intended for educational and local testing purposes, and is not suitable for production environments. As an added security measure, we strongly recommend implementing the PKCE (Proof Key for Code Exchange) extension. You can learn more about PKCE and its benefits by visiting [https://oauth.net/2/pkce](https://oauth.net/2/pkce).

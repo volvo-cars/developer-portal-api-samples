@@ -1,18 +1,18 @@
 import path from "path";
 import dotenv from "dotenv";
 import express from "express";
-import { Issuer, generators } from "openid-client";
+import { Issuer } from "openid-client";
 import cookieParser from "cookie-parser";
 
 dotenv.config();
 
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
-const redirect_uri = process.env.REDIRECT_URI;
+const redirectUri = process.env.REDIRECT_URI;
 const scopes = process.env.SCOPES;
 const port = process.env.PORT || 3000;
 
-const redirectPath = new URL(redirect_uri).pathname;
+const redirectPath = new URL(redirectUri).pathname;
 
 /**
  * Creates and returns a new OpenID Connect client with the provided client credentials.
@@ -23,7 +23,7 @@ const createClient = async () => {
   const client = new issuer.Client({
     client_id: clientId,
     client_secret: clientSecret,
-    redirect_uris: [redirect_uri],
+    redirect_uris: [redirectUri],
     response_types: ["code"],
   });
 
@@ -40,17 +40,11 @@ const main = async () => {
 
   const client = await createClient();
 
-  /**
-   * Generate a code verifier and code challenge as part of the PKCE extension in OAuth2 flow, which prevents CSRF and authorization code injection attacks and enhances application security
-   * Learn more about the PKCE extension: https://oauth.net/2/pkce
-   */
-  const codeVerifier = generators.codeVerifier();
-  const codeChallenge = generators.codeChallenge(codeVerifier);
-  const state = generators.state();
-
   // Renders the main view
   app.get("/", (req, res) => {
-    if (req.cookies.refresh_token && req.cookies.access_token) {
+    const { refresh_token, access_token } = req.cookies;
+
+    if (access_token && refresh_token) {
       res.sendFile(path.join(__dirname, "main.html"));
     } else {
       res.redirect("/login");
@@ -69,18 +63,11 @@ const main = async () => {
   app.get(redirectPath, async (req, res) => {
     const code = req.query.code;
 
-    const grantType = "authorization_code";
-
     if (code) {
-      const tokenSet = await client.callback(
-        redirect_uri,
-        {
-          code,
-          grant_type: grantType,
-          state,
-        },
-        { code_verifier: codeVerifier, state }
-      );
+      const tokenSet = await client.callback(redirectUri, {
+        code,
+        grant_type: "authorization_code",
+      });
 
       res.cookie("refresh_token", tokenSet.refresh_token);
       res.cookie("access_token", tokenSet.access_token);
@@ -97,9 +84,6 @@ const main = async () => {
   app.get("/auth/login", (req, res) => {
     const loginUrl = client.authorizationUrl({
       scope: scopes,
-      code_challenge: codeChallenge,
-      code_challenge_method: "S256",
-      state,
     });
 
     res.status(200).json({ loginUrl });

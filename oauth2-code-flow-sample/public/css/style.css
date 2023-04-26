@@ -1,6 +1,7 @@
 main {
   max-width: 700px;
   margin: auto;
+  padding-top: calc(var(--v-space-24) * 3);
 }
 
 button {
