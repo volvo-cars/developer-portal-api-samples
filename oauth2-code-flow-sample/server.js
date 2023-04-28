@@ -61,11 +61,9 @@ const main = async () => {
    * It will provide the login code as a query parameter and exchange it for access and refresh tokens.
    **/
   app.get(redirectPath, async (req, res) => {
-    const code = req.query.code;
-
-    if (code) {
+    try {
       const tokenSet = await client.callback(redirectUri, {
-        code,
+        code: req.query.code,
         grant_type: "authorization_code",
       });
 
@@ -73,8 +71,10 @@ const main = async () => {
       res.cookie("access_token", tokenSet.access_token);
 
       res.redirect("/");
-    } else {
-      res.redirect("/login");
+    } catch (e) {
+      console.error(
+        `Request failed with error "${e.error}" and message "${e.error_description}"`
+      );
     }
   });
 
