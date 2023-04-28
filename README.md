@@ -9,6 +9,7 @@ Visit our full documentation at [Volvo Cars’ Developer Portal](https://develop
 ## Samples in this repository
 
 - [Fetching vehicle data](/connected-vehicle-fetch-sample)
+- [OAuth2 code flow](/oauth2-code-flow-sample)
 
 More samples will be added in the future.
 
