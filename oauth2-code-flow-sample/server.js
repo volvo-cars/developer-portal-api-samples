@@ -1,3 +1,8 @@
+/*
+  Copyright 2022 Volvo Car Corporation
+  SPDX-License-Identifier: Apache-2.0
+*/
+
 import path from "path";
 import dotenv from "dotenv";
 import express from "express";
