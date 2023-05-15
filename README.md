@@ -20,7 +20,3 @@ Please contact us at developer.portal@volvocars.com for support related queries.
 ## Contributing
 
 See the [contributing guide](CONTRIBUTING.md) for detailed instructions on how to get started with this project.
-
-## License
-
-This repository is licensed under [Apache License 2.0](LICENSE) © 2022 Volvo Cars.
