@@ -1,3 +1,8 @@
+/**
+ * Copyright 2022 Volvo Car Corporation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 const REFRESH_TOKEN_COOKIE = "refresh_token";
 const ACCESS_TOKEN_COOKIE = "access_token";
 
