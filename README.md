@@ -23,4 +23,4 @@ See the [contributing guide](CONTRIBUTING.md) for detailed instructions on how t
 
 ## License
 
-This repository is licensed under [Apache License 2.0](LICENSE) © 2022 Volvo Cars.
+This repository is licensed under [Apache License 2.0](LICENSE)
