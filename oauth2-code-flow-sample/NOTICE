@@ -214,11 +214,7 @@ Copyright (c) 2015-2022 Douglas Christopher Wilson <doug@somethingdoug.com>
 Copyright(c) 2015-2022 Douglas Christopher Wilson
 Copyright(c) 2014 Jonathan Ong
 node-cookie-signature 1.0.6 npmjs:cookie-signature/1.0.6
-Copyright (c) 2012 LearnBoost "readmeFilename": "Readme.md"
-Copyright (c) 2012 LearnBoost "readmeFilename": "Readme.md", "repository": { "type": "git", "url": "git+https://github.com/visionmedia/node-cookie-signature.git" }, "scripts": { "t
-Copyright (c) 2012 LearnBoost "readmeFilename": "Readme.md", "bugs": { "url": "https://github.com/visionmedia/node-cookie-signature/issues" }, "homepage": "https://github.com/visionmedia/n
-Copyright (c) 2012 LearnBoost "readmeFilename": "Readme.md", "bugs": { "url": "https://github.com/visionmedia/node-cookie-signature/issues" }, "\_id": "cookie-signature@1.0.6", "dist": {
-node-lru-cache 6.0.0 npmjs:lru-cache/6.0.0
+Copyright (c) 2012 LearnBoost
 Copyright (c) Isaac Z. Schlueter and Contributors
 nodejs Deprecate 2.0.0 npmjs:depd/2.0.0
 Copyright(c) 2015 Douglas Christopher Wilson
