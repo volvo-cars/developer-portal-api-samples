@@ -23,7 +23,7 @@ const redirectPath = new URL(redirectUri).pathname;
  * Creates and returns a new OpenID Connect client with the provided client credentials.
  */
 const createClient = async () => {
-  const issuer = await Issuer.discover("https://volvoid.eu.qa.volvocars.com");
+  const issuer = await Issuer.discover("https://volvoid.eu.volvocars.com");
 
   const client = new issuer.Client({
     client_id: clientId,
