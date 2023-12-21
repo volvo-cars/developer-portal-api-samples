@@ -7,7 +7,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const baseUrl = "https://api.volvocars.com/connected-vehicle/v1";
+const baseUrl = "https://api.volvocars.com/connected-vehicle/v2";
 
 const vccApiKey = process.env.VCC_API_KEY;
 const accessToken = process.env.ACCESS_TOKEN;
@@ -36,13 +36,12 @@ const main = async () => {
 /**
  * Uses the vehicle list endpoint to fetch all cars connected to the Volvo ID.
  *
- * Full endpoint docs: https://developer.volvocars.com/apis/connected-vehicle/endpoints/vehicle/#list-vehicles
+ * Full endpoint docs: https://developer.volvocars.com/apis/connected-vehicle/v2/endpoints/vehicle/#list-vehicles
  */
 const fetchVehicles = async () => {
   const response = await fetch(`${baseUrl}/vehicles`, {
     headers: {
-      accept:
-        "application/vnd.volvocars.api.connected-vehicle.vehiclelist.v1+json",
+      accept: "application/json",
       "vcc-api-key": vccApiKey,
       authorization: `Bearer ${accessToken}`,
     },
@@ -60,12 +59,12 @@ const fetchVehicles = async () => {
 /**
  * Uses the vehicle details endpoint to fetch details regarding the car.
  *
- * Full endpoint docs: https://developer.volvocars.com/apis/connected-vehicle/endpoints/vehicle/#get-vehicle-details
+ * Full endpoint docs: https://developer.volvocars.com/apis/connected-vehicle/v2/endpoints/vehicle/#get-vehicle-details
  */
 const fetchVehicleDetails = async (vinNumber) => {
   const response = await fetch(`${baseUrl}/vehicles/${vinNumber}`, {
     headers: {
-      accept: "application/vnd.volvocars.api.connected-vehicle.vehicle.v1+json",
+      accept: "application/json",
       "vcc-api-key": vccApiKey,
       authorization: `Bearer ${accessToken}`,
     },
