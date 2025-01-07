@@ -6,7 +6,7 @@
 import path from "path";
 import dotenv from "dotenv";
 import express from "express";
-import { Issuer } from "openid-client";
+import { Issuer, generators } from "openid-client";
 import cookieParser from "cookie-parser";
 
 dotenv.config();
@@ -23,7 +23,7 @@ const redirectPath = new URL(redirectUri).pathname;
  * Creates and returns a new OpenID Connect client with the provided client credentials.
  */
 const createClient = async () => {
-  const issuer = await Issuer.discover("https://volvoid.eu.volvocars.com");
+  const issuer = await Issuer.discover("https://volvoid.eu.qa.volvocars.com");
 
   const client = new issuer.Client({
     client_id: clientId,
@@ -67,10 +67,15 @@ const main = async () => {
    **/
   app.get(redirectPath, async (req, res) => {
     try {
+      console.log(" req.cookies", req.cookies)
+      //const code_verifier = generators.codeVerifier();
+      // const params = client.callbackParams(req);
       const tokenSet = await client.callback(redirectUri, {
         code: req.query.code,
         grant_type: "authorization_code",
-      });
+      }, { code_verifier: req.cookies.code_verifier });
+
+      // const tokenSet = await client.callback(redirectUri, params, { code_verifier });
 
       res.cookie("refresh_token", tokenSet.refresh_token);
       res.cookie("access_token", tokenSet.access_token);
@@ -78,7 +83,7 @@ const main = async () => {
       res.redirect("/");
     } catch (e) {
       console.error(
-        `Request failed with error "${e.error}" and message "${e.error_description}"`
+        `Request failed with error "${e}" and message "${e}"`
       );
     }
   });
@@ -87,8 +92,13 @@ const main = async () => {
    * This endpoint returns a URL that can be used by the client to redirect the user to the Volvo ID login page.
    */
   app.get("/auth/login", (req, res) => {
+    let code_verifier = generators.codeVerifier();//client.randomPKCECodeVerifier();
+    let code_challenge = generators.codeChallenge(code_verifier);//await client.calculatePKCECodeChallenge(code_verifier);
+    res.cookie("code_verifier", code_verifier, { httpOnly: true});
     const loginUrl = client.authorizationUrl({
       scope: scopes,
+      code_challenge,
+      code_challenge_method: "S256",
     });
 
     res.status(200).json({ loginUrl });
