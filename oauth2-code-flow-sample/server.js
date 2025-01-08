@@ -6,6 +6,7 @@
 import path from "path";
 import dotenv from "dotenv";
 import express from "express";
+import rateLimit from 'express-rate-limit';
 import * as client from "openid-client";
 import cookieParser from "cookie-parser";
 
@@ -18,6 +19,14 @@ const scopes = process.env.SCOPES;
 const port = process.env.PORT || 3000;
 
 const redirectPath = new URL(redirectUri).pathname;
+
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 50,
+  message: 'Too many login attempts, please try again later',
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
 const main = async () => {
   const app = express();
@@ -48,7 +57,7 @@ const main = async () => {
   /**
    * This endpoint returns a URL that can be used by the client to redirect the user to the Volvo ID login page.
    */
-  app.get("/auth/login", async (req, res) => {
+  app.get("/auth/login", authLimiter, async (req, res) => {
     let code_verifier = client.randomPKCECodeVerifier();
     let code_challenge = await client.calculatePKCECodeChallenge(code_verifier);
     res.cookie("code_verifier", code_verifier, { httpOnly: true });
@@ -68,7 +77,7 @@ const main = async () => {
    * This endpoint is the destination for Volvo ID after a successful login, also known as your redirect URI.
    * It will provide the login code as a query parameter and exchange it for access and refresh tokens.
    **/
-  app.get(redirectPath, async (req, res) => {
+  app.get(redirectPath, authLimiter, async (req, res) => {
     try {
       const protocol = req.protocol;
       const host = req.get("host");
