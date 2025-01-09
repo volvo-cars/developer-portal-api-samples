@@ -36,8 +36,7 @@ const main = async () => {
   app.use(express.static(__dirname + "/public"));
   app.use(cookieParser());
 
-  const myServer = new URL("https://volvoid.eu.qa.volvocars.com");
-  let config = await client.discovery(myServer, clientId, clientSecret);
+  let config = await client.discovery(new URL("https://volvoid.eu.qa.volvocars.com"), clientId, clientSecret);
 
   // Renders the main view
   app.get("/", (req, res) => {
@@ -61,6 +60,7 @@ const main = async () => {
     let code_verifier = client.randomPKCECodeVerifier();
     let code_challenge = await client.calculatePKCECodeChallenge(code_verifier);
     res.cookie("code_verifier", code_verifier, { httpOnly: true });
+    
     let parameters = {
       redirect_uri: redirectUri,
       scope: scopes,
