@@ -6,9 +6,10 @@
 import path from "path";
 import dotenv from "dotenv";
 import express from "express";
-import rateLimit from 'express-rate-limit';
+import rateLimit from "express-rate-limit";
 import * as client from "openid-client";
 import cookieParser from "cookie-parser";
+import session from "express-session";
 
 dotenv.config();
 
@@ -23,7 +24,7 @@ const redirectPath = new URL(redirectUri).pathname;
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 50,
-  message: 'Too many login attempts, please try again later',
+  message: "Too many login attempts, please try again later",
   standardHeaders: true,
   legacyHeaders: false,
 });
@@ -36,7 +37,26 @@ const main = async () => {
   app.use(express.static(__dirname + "/public"));
   app.use(cookieParser());
 
-  let config = await client.discovery(new URL("https://volvoid.eu.qa.volvocars.com"), clientId, clientSecret);
+  let config = await client.discovery(
+    new URL("https://volvoid.eu.volvocars.com"),
+    clientId,
+    clientSecret
+  );
+
+  /**
+   * MemoryStore is used debugging and developing, for production refer to https://github.com/expressjs/session#compatible-session-stores
+   * **/
+  let sessionConfig = {
+    secret: "your-secret-key",
+    cookie: {
+      httpOnly: true,
+      maxAge: 600000,
+    },
+  };
+  if (app.get("env") === "production") {
+    sess.cookie.secure = true;
+  }
+  app.use(session(sessionConfig));
 
   // Renders the main view
   app.get("/", (req, res) => {
@@ -59,9 +79,10 @@ const main = async () => {
   app.get("/auth/login", authLimiter, async (req, res) => {
     let code_verifier = client.randomPKCECodeVerifier();
     let code_challenge = await client.calculatePKCECodeChallenge(code_verifier);
-    res.cookie("code_verifier", code_verifier, { httpOnly: true });
+
+    req.session.code_verifier = code_verifier;
     
-    let parameters = {
+    const parameters = {
       redirect_uri: redirectUri,
       scope: scopes,
       code_challenge,
@@ -88,7 +109,7 @@ const main = async () => {
         config,
         new URL(currentURL),
         {
-          pkceCodeVerifier: req.cookies.code_verifier,
+          pkceCodeVerifier: req.session.code_verifier,
           idTokenExpected: true,
         }
       );
