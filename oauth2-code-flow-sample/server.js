@@ -108,7 +108,7 @@ const main = async () => {
 
       res.redirect("/");
     } catch (e) {
-      console.error(`Request failed with error "${e}" and message "${e}"`);
+      console.error(`Request failed with error "${e}"`);
     }
   });
 
