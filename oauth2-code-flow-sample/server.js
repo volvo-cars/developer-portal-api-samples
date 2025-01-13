@@ -6,8 +6,9 @@
 import path from "path";
 import dotenv from "dotenv";
 import express from "express";
-import { Issuer } from "openid-client";
+import * as client from "openid-client";
 import cookieParser from "cookie-parser";
+import session from "express-session";
 
 dotenv.config();
 
@@ -16,24 +17,7 @@ const clientSecret = process.env.CLIENT_SECRET;
 const redirectUri = process.env.REDIRECT_URI;
 const scopes = process.env.SCOPES;
 const port = process.env.PORT || 3000;
-
 const redirectPath = new URL(redirectUri).pathname;
-
-/**
- * Creates and returns a new OpenID Connect client with the provided client credentials.
- */
-const createClient = async () => {
-  const issuer = await Issuer.discover("https://volvoid.eu.volvocars.com");
-
-  const client = new issuer.Client({
-    client_id: clientId,
-    client_secret: clientSecret,
-    redirect_uris: [redirectUri],
-    response_types: ["code"],
-  });
-
-  return client;
-};
 
 const main = async () => {
   const app = express();
@@ -43,7 +27,25 @@ const main = async () => {
   app.use(express.static(__dirname + "/public"));
   app.use(cookieParser());
 
-  const client = await createClient();
+  let config = await client.discovery(
+    new URL("https://volvoid.eu.volvocars.com"),
+    clientId,
+    clientSecret
+  );
+
+  /**
+   * MemoryStore is used debugging and developing, for production refer to https://github.com/expressjs/session#compatible-session-stores
+   * **/
+  let sessionConfig = {
+    secret: "your-secret-key",
+    cookie: {
+      httpOnly: true,
+      maxAge: 600000,
+      //secure: true
+    },
+  };
+
+  app.use(session(sessionConfig));
 
   // Renders the main view
   app.get("/", (req, res) => {
@@ -60,6 +62,26 @@ const main = async () => {
   app.get("/login", (req, res) => {
     res.sendFile(path.join(__dirname, "login.html"));
   });
+  /**
+   * This endpoint returns a URL that can be used by the client to redirect the user to the Volvo ID login page.
+   */
+  app.get("/auth/login", async (req, res) => {
+    let code_verifier = client.randomPKCECodeVerifier();
+    let code_challenge = await client.calculatePKCECodeChallenge(code_verifier);
+
+    req.session.code_verifier = code_verifier;
+    
+    const parameters = {
+      redirect_uri: redirectUri,
+      scope: scopes,
+      code_challenge,
+      code_challenge_method: "S256",
+    };
+
+    let loginUrl = client.buildAuthorizationUrl(config, parameters);
+
+    res.status(200).json({ loginUrl: loginUrl.href });
+  });
 
   /**
    * This endpoint is the destination for Volvo ID after a successful login, also known as your redirect URI.
@@ -67,38 +89,37 @@ const main = async () => {
    **/
   app.get(redirectPath, async (req, res) => {
     try {
-      const tokenSet = await client.callback(redirectUri, {
-        code: req.query.code,
-        grant_type: "authorization_code",
-      });
+      const protocol = req.protocol;
+      const host = req.get("host");
+      const originalUrl = req.originalUrl;
+      const currentURL = `${protocol}://${host}${originalUrl}`;
+
+      let tokenSet = await client.authorizationCodeGrant(
+        config,
+        new URL(currentURL),
+        {
+          pkceCodeVerifier: req.session.code_verifier,
+          idTokenExpected: true,
+        }
+      );
 
       res.cookie("refresh_token", tokenSet.refresh_token);
       res.cookie("access_token", tokenSet.access_token);
 
       res.redirect("/");
     } catch (e) {
-      console.error(
-        `Request failed with error "${e.error}" and message "${e.error_description}"`
-      );
+      console.error(`Request failed with error "${e}"`);
     }
-  });
-
-  /**
-   * This endpoint returns a URL that can be used by the client to redirect the user to the Volvo ID login page.
-   */
-  app.get("/auth/login", (req, res) => {
-    const loginUrl = client.authorizationUrl({
-      scope: scopes,
-    });
-
-    res.status(200).json({ loginUrl });
   });
 
   /**
    * Use the provided refresh token from the token exchange to call the refresh endpoint and obtain a new access token.
    */
   app.post("/auth/refresh", async (req, res) => {
-    const tokenSet = await client.refresh(req.body.refreshToken);
+    const tokenSet = await client.refreshTokenGrant(
+      config,
+      req.body.refreshToken
+    );
 
     res.status(200).json({
       refreshToken: tokenSet.refresh_token,
