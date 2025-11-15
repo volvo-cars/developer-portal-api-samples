@@ -29,8 +29,7 @@ const main = async () => {
 
   let config = await client.discovery(
     new URL("https://volvoid.eu.volvocars.com"),
-    clientId,
-    clientSecret
+    clientId
   );
 
   /**
@@ -100,6 +99,7 @@ const main = async () => {
         {
           pkceCodeVerifier: req.session.code_verifier,
           idTokenExpected: true,
+          client_secret: clientSecret,
         }
       );
 

@@ -26,7 +26,6 @@ npm install
 Create an `.env` file with the following environment variables:
 
 - `CLIENT_ID` - This is the identifier for your client credentials. It is provided to you after the application publishing process is completed.
-- `CLIENT_SECRET` - This is a private key for your client credentials. It is also provided to you after the application publishing process is completed.
 - `REDIRECT_URI` - A valid callback URL that was registered when you published your application. It is used to redirect the user after the OAuth2 authorization flow is completed. If used in this application, it's origin must match this server's origin.
 - `SCOPES` - A space-separated list of scopes that the user needs to grant consent for.
 - `PORT` - Specifies the application's network port. To successfully run this application, the specified port **must** match the port of your `REDIRECT_URI`.
@@ -43,4 +42,4 @@ Your application will now be available at `http://localhost:3000`
 
 ## Disclaimer
 
-Please note that this project is solely intended for educational and local testing purposes, and is not suitable for production environments. As an added security measure, we strongly recommend implementing the PKCE (Proof Key for Code Exchange) extension. You can learn more about PKCE and its benefits by visiting [https://oauth.net/2/pkce](https://oauth.net/2/pkce).
+Please note that this project is solely intended for educational and local testing purposes, and is not suitable for production environments. This sample uses the PKCE (Proof Key for Code Exchange) extension, which is a security measure to protect against authorization code interception attacks. You can learn more about PKCE and its benefits by visiting [https://oauth.net/2/pkce](https://oauth.net/2/pkce).
