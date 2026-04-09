@@ -24,6 +24,8 @@ const main = async () => {
   const app = express();
   const __dirname = path.resolve();
 
+  app.set("trust proxy", 1);
+
   app.use(express.json());
   app.use(express.static(__dirname + "/public"));
   app.use(cookieParser());
@@ -42,7 +44,7 @@ const main = async () => {
     cookie: {
       httpOnly: true,
       maxAge: 600000,
-      //secure: true
+      secure: process.env.NODE_ENV === "production",
     },
   };
 
