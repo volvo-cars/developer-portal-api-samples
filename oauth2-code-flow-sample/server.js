@@ -9,6 +9,7 @@ import express from "express";
 import * as client from "openid-client";
 import cookieParser from "cookie-parser";
 import session from "express-session";
+import rateLimit from "express-rate-limit";
 
 dotenv.config();
 
@@ -47,6 +48,13 @@ const main = async () => {
 
   app.use(session(sessionConfig));
 
+  const loginRateLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // limit each IP to 100 requests per windowMs
+    standardHeaders: true,
+    legacyHeaders: false,
+  });
+
   // Renders the main view
   app.get("/", (req, res) => {
     const { refresh_token, access_token } = req.cookies;
@@ -59,7 +67,7 @@ const main = async () => {
   });
 
   // Renders the login view
-  app.get("/login", (req, res) => {
+  app.get("/login", loginRateLimiter, (req, res) => {
     res.sendFile(path.join(__dirname, "login.html"));
   });
   /**
